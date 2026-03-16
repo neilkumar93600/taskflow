@@ -1,6 +1,4 @@
-type ClassValue = string | undefined | null | false | ClassValue[]
-
-export function cn(...inputs: ClassValue[]): string {
+export function cn(...inputs: any[]): string {
   return inputs
     .flat(Infinity)
     .filter(Boolean)

@@ -41,7 +41,8 @@ export function TaskForm({ mode, task }: TaskFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    // Cast resolver to align with react-hook-form v7 + latest zod resolver types
+    resolver: zodResolver(schema) as any,
     defaultValues: {
       title:       task?.title ?? '',
       description: task?.description ?? '',
