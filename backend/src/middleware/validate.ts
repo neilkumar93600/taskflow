@@ -12,9 +12,9 @@ export const validate =
       next()
     } catch (err) {
       if (err instanceof ZodError) {
-        const errors = err.errors.map((e) => ({
-          field: e.path.join('.'),
-          message: e.message,
+        const errors = err.issues.map((issue) => ({
+          field: issue.path.join('.'),
+          message: issue.message,
         }))
         next({
           name: 'ValidationError',
