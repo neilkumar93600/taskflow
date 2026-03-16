@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express'
 import * as tasksService from './tasks.service'
 import { sendSuccess } from '../../utils/apiResponse'
 
+const getParamAsString = (value: string | string[]): string =>
+  Array.isArray(value) ? value[0] : value
+
 export const getTasks = async (
   req: Request,
   res: Response,
@@ -21,7 +24,10 @@ export const getTaskById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const task = await tasksService.getTaskById(req.params.id, req.user!.id)
+    const task = await tasksService.getTaskById(
+      getParamAsString(req.params.id),
+      req.user!.id
+    )
     sendSuccess(res, { task })
   } catch (err) {
     next(err)
@@ -48,7 +54,7 @@ export const updateTask = async (
 ): Promise<void> => {
   try {
     const task = await tasksService.updateTask(
-      req.params.id,
+      getParamAsString(req.params.id),
       req.user!.id,
       req.body
     )
@@ -65,7 +71,7 @@ export const toggleTaskStatus = async (
 ): Promise<void> => {
   try {
     const task = await tasksService.toggleTaskStatus(
-      req.params.id,
+      getParamAsString(req.params.id),
       req.user!.id
     )
     sendSuccess(res, { task })
@@ -80,7 +86,7 @@ export const deleteTask = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    await tasksService.deleteTask(req.params.id, req.user!.id)
+    await tasksService.deleteTask(getParamAsString(req.params.id), req.user!.id)
     sendSuccess(res, { message: 'Task deleted successfully' })
   } catch (err) {
     next(err)
